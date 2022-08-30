@@ -36,18 +36,16 @@ describe "Merchants API" do
         merchant = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to be_successful
+        
+        expect(merchant[:data]).to have_key(:id)
+        expect(merchant[:data][:id]).to eq(id.to_s)
 
-        expect(merchant).to have_key(:id)
-        expect(merchant[:id]).to eq(id)
+        expect(merchant[:data][:attributes]).to have_key(:name)
+        expect(merchant[:data][:attributes][:name]).to be_a(String)
 
-        expect(merchant).to have_key(:name)
-        expect(merchant[:name]).to be_a(String)
+        expect(merchant[:data][:attributes]).to_not have_key(:created_at)
 
-        expect(merchant).to have_key(:created_at)
-        expect(merchant[:created_at]).to be_a(String)
-
-        expect(merchant).to have_key(:updated_at)
-        expect(merchant[:updated_at]).to be_an(String)
+        expect(merchant[:data][:attributes]).to_not have_key(:updated_at)
     end 
 end 
     #     it 'can create a new merchant' do 

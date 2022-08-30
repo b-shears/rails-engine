@@ -49,15 +49,13 @@ describe "Merchants API" do
         expect(merchant).to have_key(:updated_at)
         expect(merchant[:updated_at]).to be_an(String)
     end 
-
-    it 'can create a new merchant' do 
-        merchant_params = ({
-                        name: 'Bob Ross'
-                        created_at: 'date'
-                        updated_at: 'date_2'
-        })
-    
-     headers = {"CONTENT_TYPE" => "application/json"}
-
-    end 
 end 
+    #     it 'can create a new merchant' do 
+    #         merchant_params = ({
+    #                         name: 'Bob Ross'
+    #                         created_at: 'date'
+    #                         updated_at: 'date_2'
+    #         })
+        
+    #         headers = {"CONTENT_TYPE" => "application/json"}
+    #     end 

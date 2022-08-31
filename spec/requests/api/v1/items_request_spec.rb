@@ -63,6 +63,15 @@ describe "Items API" do
     expect(item[:data][:attributes][:merchant_id]).to be_a(Integer)
   end 
 
+   it 'returns a 404 response if an invalid id is entered for one item' do 
+       merchant = create(:merchant)
+       item_id = create(:item, merchant_id: merchant.id).id
+
+        get "/api/v1/items//123456789"
+
+        expect(response.status).to eq(404)
+    end 
+
   it 'can create a new item' do 
     merchant = create(:merchant)
     
@@ -88,6 +97,19 @@ describe "Items API" do
     
   end 
 
+  xit 'returns a 404 response if an invalid item is created' do 
+    merchant = create(:merchant)
+    item_params = ({ 
+                    unit_price: 2.5,
+                    merchant_id: merchant.id
+    })
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+       
+    expect(response.status).to eq(404)
+  end 
+
   it 'can update an item' do
     merchant = create(:merchant)
     id = create(:item, merchant_id: merchant.id).id
@@ -103,4 +125,18 @@ describe "Items API" do
     expect(item.name).to_not eq(previous_name)
     expect(item.name).to eq("Duff Beer")
   end
+
+  it 'can destroy an item' do 
+    merchant = create(:merchant)
+    item = create(:item, merchant_id: merchant.id)
+
+    expect(Item.count).to eq(1)
+
+    delete "/api/v1/items/#{item.id}"
+
+    expect(response).to be_successful
+    expect(response.status).to eq(204)
+    expect(Item.count).to eq(0)
+    expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end 
 end

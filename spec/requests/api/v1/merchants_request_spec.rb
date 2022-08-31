@@ -10,7 +10,10 @@ describe "Merchants API" do
         expect(response).to be_successful
 
         merchants = JSON.parse(response.body, symbolize_names: true)
-      
+        
+        expect(response.status).to eq(200)
+        expect(response.status).to_not eq(404)
+
         expect(merchants[:data].count).to eq(3)
 
         merchants[:data].each do |merchant|
@@ -29,16 +32,19 @@ describe "Merchants API" do
     end 
 
     it 'can get one merchant by its id' do 
-        id = create(:merchant).id 
+        merchant_id = create(:merchant).id 
 
-        get "/api/v1/merchants/#{id}"
+        get "/api/v1/merchants/#{merchant_id}"
+
+        expect(response).to be_successful
 
         merchant = JSON.parse(response.body, symbolize_names: true)
 
-        expect(response).to be_successful
-        
+        expect(response.status).to eq(200)
+        expect(response.status).to_not eq(404)
+       
         expect(merchant[:data]).to have_key(:id)
-        expect(merchant[:data][:id]).to eq(id.to_s)
+        expect(merchant[:data][:id]).to be_a(String)
 
         expect(merchant[:data][:attributes]).to have_key(:name)
         expect(merchant[:data][:attributes][:name]).to be_a(String)
@@ -48,12 +54,4 @@ describe "Merchants API" do
         expect(merchant[:data][:attributes]).to_not have_key(:updated_at)
     end 
 end 
-    #     it 'can create a new merchant' do 
-    #         merchant_params = ({
-    #                         name: 'Bob Ross'
-    #                         created_at: 'date'
-    #                         updated_at: 'date_2'
-    #         })
-        
-    #         headers = {"CONTENT_TYPE" => "application/json"}
-    #     end 
+

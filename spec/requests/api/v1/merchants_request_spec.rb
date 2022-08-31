@@ -27,7 +27,6 @@ describe "Merchants API" do
            
 
             expect(merchant[:attributes]).to_not have_key(:updated_at)
-            
         end 
     end 
 

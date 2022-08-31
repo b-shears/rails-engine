@@ -91,7 +91,7 @@ describe "Items API" do
     id = create(:item, merchant_id: merchant.id).id
 
     previous_name = Item.last.name
-    item_params = { name: 'Duff Beer', merchant_id: "#{merchant.id}"}
+    item_params = { name: 'Duff Beer'}
     headers = {"CONTENT_TYPE" => "application/json"}
 
     patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate(item: item_params)

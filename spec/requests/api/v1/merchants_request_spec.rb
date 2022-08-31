@@ -52,5 +52,13 @@ describe "Merchants API" do
 
         expect(merchant[:data][:attributes]).to_not have_key(:updated_at)
     end 
+
+    it 'returns a 404 response if an invalid id is entered' do 
+        merchant_id = create(:merchant).id 
+
+        get "/api/v1/merchants/123456789"
+
+        expect(response.status).to eq(404)
+    end 
 end 
 

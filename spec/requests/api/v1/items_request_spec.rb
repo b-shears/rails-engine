@@ -63,7 +63,7 @@ describe "Items API" do
     expect(item[:data][:attributes][:merchant_id]).to be_a(Integer)
   end 
 
-  xit 'can create a new item' do 
+  it 'can create a new item' do 
     merchant = create(:merchant)
     
     item_params = ({ 
@@ -73,6 +73,7 @@ describe "Items API" do
                     merchant_id: merchant.id
     })
     headers = {"CONTENT_TYPE" => "application/json"}
+
     post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
 
     created_item = Item.last
@@ -84,6 +85,7 @@ describe "Items API" do
     expect(created_item.description).to eq(item_params[:description])
     expect(created_item.unit_price).to eq(item_params[:unit_price])
     expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+    
   end 
 
   it 'can update an item' do

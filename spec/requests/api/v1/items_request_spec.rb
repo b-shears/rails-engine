@@ -67,7 +67,7 @@ describe "Items API" do
        merchant = create(:merchant)
        item_id = create(:item, merchant_id: merchant.id).id
 
-        get "/api/v1/items//123456789"
+        get "/api/v1/items/123456789"
 
         expect(response.status).to eq(404)
     end 
@@ -138,5 +138,50 @@ describe "Items API" do
     expect(response.status).to eq(204)
     expect(Item.count).to eq(0)
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end 
+
+  it 'can return all items by name' do 
+    merchant_1 = create(:merchant, name: "M-M-M-M Mud")
+    item_1 = create(:item, name: "Spade Shovel", merchant_id: merchant_1.id)
+    item_2 = create(:item, name: "Flat Shovel", merchant_id: merchant_1.id)
+
+    get "/api/v1/items/find_all/?name=shovel"
+
+    expect(response).to be_successful
+    
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(items[:data].count).to eq(2)
+    
+    items[:data].each do |item| 
+      expect(item[:attributes]).to have_key(:name)
+      expect(item[:attributes][:name]).to be_a(String)
+    
+      expect(item[:attributes]).to have_key(:description)
+      expect(item[:attributes][:description]).to be_a(String)
+
+      expect(item[:attributes]).to have_key(:unit_price)
+      expect(item[:attributes][:unit_price]).to be_a(Float)
+
+      expect(item[:attributes]).to have_key(:merchant_id)
+      expect(item[:attributes][:merchant_id]).to be_a(Integer)
+    end 
+  end 
+
+  it 'can find all items by fragment' do 
+    merchant_1 = create(:merchant, name: "M-M-M-M Mud")
+    item_1 = create(:item, name: "Spade Shovel", merchant_id: merchant_1.id)
+    item_2 = create(:item, name: "Flat Shovel", merchant_id: merchant_1.id)
+
+    get "/api/v1/items/find_all/?name=spa"
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(items[:data].count).to eq(1)
+
+    items[:data].each do |item| 
+      expect(item[:attributes]).to have_key(:name)
+      expect(item[:attributes][:name]).to eq("Spade Shovel")
+    end
   end 
 end

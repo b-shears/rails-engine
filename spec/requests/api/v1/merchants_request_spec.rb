@@ -41,7 +41,7 @@ describe "Merchants API" do
 
         expect(response.status).to eq(200)
         expect(response.status).to_not eq(404)
-       
+        
         expect(merchant[:data]).to have_key(:id)
         expect(merchant[:data][:id]).to be_a(String)
 
@@ -60,5 +60,33 @@ describe "Merchants API" do
 
         expect(response.status).to eq(404)
     end 
+
+     it 'can return a single merchant and allow the user to specify the search with a name query parameter' do 
+        merchant_1 = Merchant.create!(name: "M-M-M-M Mud")
+
+        get '/api/v1/merchants/find?name=Mud'
+
+        merchant = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to be_successful 
+        expect(response.status).to eq(200)
+
+        expect(merchant[:data][:attributes][:name]).to eq(merchant_1.name)   
+    end 
+
+      xit 'can return an error message if the search field is left empty' do 
+           merchant_1 = Merchant.create!(name: "M-M-M-M Mud")
+
+           get '/api/v1/merchants/find?name=Dirt'
+
+           merchant = JSON.parse(response.body, symbolize_names: true)
+
+           expect(response).to be_successful
+           expect(response.status).to eq(200)
+           expect(response).to eq("No merchant found")
+      end 
 end 
+
+
+
 

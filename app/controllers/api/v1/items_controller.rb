@@ -13,11 +13,7 @@ class Api::V1::ItemsController < ApplicationController
 
     def create 
         item = Item.new(item_params)
-        if item.save 
-            render json: ItemSerializer.new(Item.create(item_params)), status: :created
-        else 
-            render status: :not_found
-        end 
+        render json: ItemSerializer.new(Item.create(item_params)), status: :created
     end 
 
     def update 

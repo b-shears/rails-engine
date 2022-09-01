@@ -175,6 +175,8 @@ describe "Items API" do
 
     get "/api/v1/items/find_all/?name=spa"
 
+    expect(response).to be_successful 
+
     items = JSON.parse(response.body, symbolize_names: true)
 
     expect(items[:data].count).to eq(1)
@@ -183,5 +185,20 @@ describe "Items API" do
       expect(item[:attributes]).to have_key(:name)
       expect(item[:attributes][:name]).to eq("Spade Shovel")
     end
+  end 
+
+  xit 'can find an item by maximum price' do 
+    merchant_1 = create(:merchant, name: "M-M-M-M Mud")
+    item_1 = create(:item, name: "Spade Shovel", merchant_id: merchant_1.id, unit_price: 95)
+    item_2 = create(:item, name: "Flat Shovel", merchant_id: merchant_1.id, unit_price: 80)
+
+    get "/api/v1/items/find?max_price=90"
+
+    expect(response).to be be_successful
+
+    item = JSON.parse(response.body, symbolize_names: true)
+ 
+    expect(item.count).to eq(1)
+
   end 
 end

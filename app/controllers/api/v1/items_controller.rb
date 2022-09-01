@@ -31,6 +31,11 @@ class Api::V1::ItemsController < ApplicationController
         render status: :no_content
     end 
 
+    def find_all_items 
+        items = Item.where("name ILIKE ?", "%#{params[:name]}%")
+        render json: ItemSerializer.new(items)
+    end 
+
     private 
 
     def item_params 

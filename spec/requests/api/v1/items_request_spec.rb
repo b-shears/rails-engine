@@ -173,7 +173,7 @@ describe "Items API" do
     item_1 = create(:item, name: "Spade Shovel", merchant_id: merchant_1.id)
     item_2 = create(:item, name: "Flat Shovel", merchant_id: merchant_1.id)
 
-    get "/api/v1/items/find_all/?name=spa"
+    get "/api/v1/items/find_all?name=spa"
 
     expect(response).to be_successful 
 
@@ -187,18 +187,35 @@ describe "Items API" do
     end
   end 
 
-  xit 'can find an item by maximum price' do 
+  it 'can find an item that is greater than or equal to the min_price that is input' do 
     merchant_1 = create(:merchant, name: "M-M-M-M Mud")
     item_1 = create(:item, name: "Spade Shovel", merchant_id: merchant_1.id, unit_price: 95)
     item_2 = create(:item, name: "Flat Shovel", merchant_id: merchant_1.id, unit_price: 80)
 
-    get "/api/v1/items/find?max_price=90"
+    get "/api/v1/items/find_all?min_price=90"
 
-    expect(response).to be be_successful
+    expect(response).to be_successful
+    
+    items = JSON.parse(response.body, symbolize_names: true)
+  
+    expect(items[:data].count).to eq(1)
+    expect(items[:data].first[:id]).to eq("#{item_1.id}")
+  end 
 
-    item = JSON.parse(response.body, symbolize_names: true)
- 
-    expect(item.count).to eq(1)
+  it 'can find an item that is less than or equal to the max_price that is input' do 
+    merchant_1 = create(:merchant, name: "M-M-M-M Mud")
+    item_1 = create(:item, name: "Spade Shovel", merchant_id: merchant_1.id, unit_price: 95)
+    item_2 = create(:item, name: "Flat Shovel", merchant_id: merchant_1.id, unit_price: 80)
+    item_3 = create(:item, name: "Trench Shovel", merchant_id: merchant_1.id, unit_price: 100)
 
+    get "/api/v1/items/find_all?max_price=95"
+
+    expect(response).to be_successful
+    
+    items = JSON.parse(response.body, symbolize_names: true)
+    
+    expect(items[:data].count).to eq(2)
+    expect(items[:data].first[:id]).to eq("#{item_1.id}")
+    expect(items[:data].last[:id]).to eq("#{item_2.id}")
   end 
 end

@@ -74,17 +74,20 @@ describe "Merchants API" do
         expect(merchant[:data][:attributes][:name]).to eq(merchant_1.name)   
     end 
 
-      xit 'can return an error message if the search field is left empty' do 
-           merchant_1 = Merchant.create!(name: "M-M-M-M Mud")
+    xit 'can search for merchants by fragment' do 
+        merchant_1 = Merchant.create!(name: "Bryan")
+        merchant_2 = Merchant.create!(name: "Bryce")
 
-           get '/api/v1/merchants/find?name=Dirt'
+        get '/api/v1/merchants/find?name=Bry'
 
-           merchant = JSON.parse(response.body, symbolize_names: true)
+        expect(response).to be_successful
 
-           expect(response).to be_successful
-           expect(response.status).to eq(200)
-           expect(response).to eq("No merchant found")
-      end 
+        merchant = JSON.parse(response.body, symbolize_names: true)
+           
+        expect(merchant.count).to eq(1)
+        expect(merchant[:data][:attributes]).to have_key(:name)
+        expect(merchant[:data][:attributes][:name]).to eq("Bryan")  
+    end 
 end 
 
 

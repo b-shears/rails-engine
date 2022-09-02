@@ -12,13 +12,7 @@ class Api::V1::MerchantsController < ApplicationController
     end 
 
     def find_merchant
-       merchant = Merchant.where("name ILIKE ?", "%#{params[:name]}%").first
-       render json: MerchantSerializer.new(merchant)
-    #    if merchant.nil?
-    #         render json: {data: { message: {"No merchant found"} } }
-    #    else 
-      
-    #    end 
+       params[:name] && params[:name].empty? == false
+       render json: MerchantSerializer.new(Merchant.find_merchant_by_name(params[:name]).first)
     end 
-
 end 

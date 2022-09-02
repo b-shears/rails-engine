@@ -1,7 +1,7 @@
 class Merchant < ApplicationRecord
     has_many :items
 
-    # def merchant_name_query
-    #   merchant = Merchant.where("name ILIKE ?", "%#{params[:name]}")
-    # end 
+    def self.find_merchant_by_name(name)
+        where("name ILIKE ?", "%#{name}%")
+    end 
 end

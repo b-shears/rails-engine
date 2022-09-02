@@ -97,19 +97,6 @@ describe "Items API" do
     
   end 
 
-  xit 'returns a 404 response if an invalid item is created' do 
-    merchant = create(:merchant)
-    item_params = ({ 
-                    unit_price: 2.5,
-                    merchant_id: merchant.id
-    })
-    headers = {"CONTENT_TYPE" => "application/json"}
-
-    post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
-       
-    expect(response.status).to eq(404)
-  end 
-
   it 'can update an item' do
     merchant = create(:merchant)
     id = create(:item, merchant_id: merchant.id).id

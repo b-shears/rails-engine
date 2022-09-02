@@ -74,7 +74,7 @@ describe "Merchants API" do
         expect(merchant[:data][:attributes][:name]).to eq(merchant_1.name)   
     end 
 
-    xit 'can search for merchants by fragment' do 
+    it 'can search for merchants by fragment' do 
         merchant_1 = Merchant.create!(name: "Bryan")
         merchant_2 = Merchant.create!(name: "Bryce")
 

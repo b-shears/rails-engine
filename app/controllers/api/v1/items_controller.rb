@@ -32,8 +32,15 @@ class Api::V1::ItemsController < ApplicationController
     end 
 
     def find_all_items 
-        items = Item.where("name ILIKE ?", "%#{params[:name]}%")
-        render json: ItemSerializer.new(items)
+        if params[:name] && params[:name].empty? == false
+            render json: ItemSerializer.new(Item.find_items_by_name(params[:name]))
+       elsif params[:min_price] && params[:min_price].empty? == false
+            render json: ItemSerializer.new(Item.find_all_by_min_price(params[:min_price]))
+       elsif params[:max_price] && params[:max_price].empty? == false
+            render json: ItemSerializer.new(Item.find_all_by_max_price(params[:max_price]))
+       else 
+            render status: :bad_request
+       end 
     end 
 
     private 

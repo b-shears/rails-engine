@@ -7,7 +7,7 @@ Things you may want to cover:
 
 Rebase practice
 
-commit 2
+commit 3
 
 * Ruby version
 

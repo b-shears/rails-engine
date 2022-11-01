@@ -5,6 +5,10 @@ application up and running.
 
 Things you may want to cover:
 
+Rebase practice
+
+commit 2
+
 * Ruby version
 
 * System dependencies
